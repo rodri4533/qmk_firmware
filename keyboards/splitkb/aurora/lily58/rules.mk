@@ -14,3 +14,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 DEFAULT_FOLDER = splitkb/aurora/lily58/rev1
+
+# Convert from Elite-C to Liatris
+CONVERT_TO=liatris
+
+# Audio control and System control
+EXTRAKEY_ENABLE = yes

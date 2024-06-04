@@ -183,10 +183,6 @@ void render_logo(void) {
     oled_set_cursor(0, 4);
 }
 
-void render_logo_text(void) {
-    oled_write_P(PSTR("lily "), false);
-}
-
 void render_kb_LED_state(void) {
     // Host Keyboard LED Status
     led_t led_usb_state = host_keyboard_led_state();
@@ -236,7 +232,6 @@ bool oled_task_kb(void) {
     if (is_keyboard_master()) {
         // Renders the current keyboard state (layers and mods)
         render_logo();
-        render_logo_text();
         render_space();
         render_layer_state();
         render_space();
@@ -288,26 +283,25 @@ bool oled_task_kb(void) {
 
 #ifdef ENCODER_ENABLE
 bool encoder_update_kb(uint8_t index, bool clockwise) {
-    if (!encoder_update_user(index, clockwise)) {
-        return false;
-    }
-    // 0 is left-half encoder,
-    // 1 is right-half encoder
-    if (index == 0) {
-        // Volume control
+    return encoder_update_user(index, clockwise);
+}
+
+bool encoder_update_user(uint8_t index, bool clockwise) {
+    if (index == 0) { /* First encoder */
         if (clockwise) {
             tap_code(KC_VOLU);
         } else {
             tap_code(KC_VOLD);
         }
-    } else if (index == 1) {
-        // Page up/Page down
+    } else if (index == 1) { /* Second encoder */
         if (clockwise) {
-            tap_code(KC_PGDN);
+            tap_code(KC_C);
         } else {
-            tap_code(KC_PGUP);
+            tap_code(KC_D);
         }
     }
-    return true;
+    return true; 
+    // If you return true, this will allow the keyboard level code to run, as well. 
+    //Returning false will override the keyboard level code. Depending on how the keyboard level function is set up.
 }
 #endif
